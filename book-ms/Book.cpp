@@ -1,16 +1,16 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Book.h"
 #include <iostream>
 #include <string>
 #include <fstream>
-//#include <iomanip>
 
 using namespace std;
 
 CBook::CBook(char* cName, char* cIsbn, char* cPrice, char* cAuthor) {
-    strncpy(m_cname, cName, NUM1);
-    strncpy(m_cIsbn, cIsbn, NUM1);
-    strncpy(m_cPrice, cPrice, NUM2);
-    strncpy(m_cAuthor, cAuthor, NUM2);
+    strncpy_s(m_cname, cName, NUM1);
+    strncpy_s(m_cIsbn, cIsbn, NUM1);
+    strncpy_s(m_cPrice, cPrice, NUM2);
+    strncpy_s(m_cAuthor, cAuthor, NUM2);
 }
 
 char* CBook::GetName() {
@@ -26,7 +26,7 @@ char* CBook::GetIsbn() {
 }
 
 void CBook::SetIsbn(char* cIsbn) {
-    strncpy(m_cIsbn, cIsbn, NUM1);
+    strncpy_s(m_cIsbn, cIsbn, NUM1);
 }
 
 char* CBook::GetPrice() {
@@ -34,7 +34,7 @@ char* CBook::GetPrice() {
 }
 
 void CBook::SetPrice(char* cPrice) {
-    strncpy(m_cPrice, cPrice, NUM2);
+    strncpy_s(m_cPrice, cPrice, NUM2);
 }
 
 char* CBook::GetAuthor() {
@@ -42,13 +42,13 @@ char* CBook::GetAuthor() {
 }
 
 void CBook::SetAuthor(char* cAuthor) {
-    strncpy(m_cAuthor, cAuthor, NUM2);
+    strncpy_s(m_cAuthor, cAuthor, NUM2);
 }
 
 //将图书对象写入到文件中
 void CBook::WriteData() {
     ofstream ofs;
-    ofs.open("/Users/heshibo01/book.txt", ios::binary | ios::app);
+    ofs.open("E:\\book.txt", ios::binary | ios::app);
     try {
         ofs.write(m_cname, NUM1);
         ofs.write(m_cIsbn, NUM1);
@@ -65,7 +65,7 @@ void CBook::WriteData() {
 //从文件中读取数据来构建对象
 void CBook::GetBookFromFile(int iCount) {
     ifstream ifs;
-    ifs.open("/Users/heshibo01/book.txt", ios::binary);
+    ifs.open("E:\\book.txt", ios::binary);
     char cName[NUM1];
     char cIsbn[NUM1];
     char cPrice[NUM2];
@@ -78,15 +78,15 @@ void CBook::GetBookFromFile(int iCount) {
         }
         ifs.read(cIsbn, NUM1);
         if (ifs.tellg() > 0) {
-            strncpy(m_cIsbn, cIsbn, NUM1);
+            strncpy_s(m_cIsbn, cIsbn, NUM1);
         }
         ifs.read(cPrice, NUM2);
         if (ifs.tellg() > 0) {
-            strncpy(m_cPrice, cPrice, NUM2);
+            strncpy_s(m_cPrice, cPrice, NUM2);
         }
         ifs.read(cAuthor, NUM2);
         if (ifs.tellg() > 0) {
-            strncpy(m_cAuthor, cAuthor, NUM2);
+            strncpy_s(m_cAuthor, cAuthor, NUM2);
         }
     }
     catch (...) {
@@ -104,8 +104,8 @@ void CBook::DeleteData(int iCount) {
     fstream tempFile;
     ofstream ofile;
     char cTempBuf[NUM1 + NUM1 + NUM2 + NUM2];
-    file.open("/Users/heshibo01/book.txt", ios::binary | ios::in | ios::out);
-    tempFile.open("/Users/heshibo01/temp.txt", ios::binary | ios::in | ios::out | ios::trunc);
+    file.open("E:\\book.txt", ios::binary | ios::in | ios::out);
+    tempFile.open("E:\\temp.txt", ios::binary | ios::in | ios::out | ios::trunc);
     file.seekg(0, ios::end);
     resPos = file.tellg();
     iDataCount = resPos / (NUM1 + NUM1 + NUM2 + NUM2);
@@ -121,7 +121,7 @@ void CBook::DeleteData(int iCount) {
         }
         file.close();
         tempFile.seekg(0, ios::beg);
-        ofile.open("/Users/heshibo01/book.txt");
+        ofile.open("E:\\book.txt");
         ofile.seekp((iCount - 1) * (NUM1 + NUM1 + NUM2 + NUM2), ios::beg);
         for (int i = 0; i < (iDataCount - iCount); i++) {
             memset(cTempBuf, 0, NUM1 + NUM1 + NUM2 + NUM2);
@@ -131,5 +131,5 @@ void CBook::DeleteData(int iCount) {
     }
     tempFile.close();
     ofile.close();
-    remove("temp.txt");
+    remove("E:\\temp.txt");
 }

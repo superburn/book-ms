@@ -6,7 +6,6 @@ class CBook
 public:
     CBook() {}
     CBook(char* cName, char* cIsbn, char* cPrice, char* cAuthor);
-    ~CBook();
 
 public:
     char* GetName();
